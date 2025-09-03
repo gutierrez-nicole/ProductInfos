@@ -16,17 +16,18 @@ namespace ProductInfos
         {
             InitializeComponent();
             this.KeyPreview = true;
-
-            txtID.KeyDown += TextBox_KeyDown;
-            txtName.KeyDown += TextBox_KeyDown;
-            txtCategory.KeyDown += TextBox_KeyDown;
-            txtPrice.KeyDown += TextBox_KeyDown;
-            txtStock.KeyDown += TextBox_KeyDown;
-            txtBrand.KeyDown += TextBox_KeyDown;
-            txtDescription.KeyDown += TextBox_KeyDown;
-            txtSupplier.KeyDown += TextBox_KeyDown;
-            txtSearch.KeyDown += TextBox_KeyDown;
+            txtID.KeyDown += Control_KeyDown;
+            txtName.KeyDown += Control_KeyDown;
+            cmbCategory.KeyDown += Control_KeyDown;
+            txtPrice.KeyDown += Control_KeyDown;
+            txtStock.KeyDown += Control_KeyDown;
+            cmbBrand.KeyDown += Control_KeyDown;
+            txtDescription.KeyDown += Control_KeyDown;
+            txtSupplier.KeyDown += Control_KeyDown;
+            cmbStatus.KeyDown += Control_KeyDown;
         }
+
+
 
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -37,7 +38,88 @@ namespace ProductInfos
             cmbStatus.Items.Add("Discontinued");
             cmbStatus.SelectedIndex = 0;
 
+            LoadCategories();
+            LoadBrands();
+
             LoadData();
+        }
+
+
+
+        private void Control_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true; // para hindi tumunog/beep
+                this.SelectNextControl((Control)sender, true, true, true, true);
+            }
+        }
+
+
+        private void LoadCategories()
+        {
+            try
+            {
+                // Default values
+                string[] defaultCategories = { "Electronics", "Clothing", "Food", "Furniture", "Stationery", "Phone" };
+                cmbCategory.Items.Clear();
+                cmbCategory.Items.AddRange(defaultCategories);
+
+                using (MySqlConnection conn = new MySqlConnection(connStr))
+                {
+                    conn.Open();
+                    string sql = "SELECT DISTINCT category FROM products WHERE category IS NOT NULL AND category <> ''";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        string cat = reader["category"].ToString();
+                        if (!cmbCategory.Items.Contains(cat)) // avoid duplicates
+                        {
+                            cmbCategory.Items.Add(cat);
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading categories: " + ex.Message);
+            }
+        }
+
+        private void LoadBrands()
+        {
+            try
+            {
+                // Default values
+                string[] defaultBrands = { "Sony", "Samsung", "Apple", "LG", "Acer", "Food", "Electronics", "Clothing" };
+                cmbBrand.Items.Clear();
+                cmbBrand.Items.AddRange(defaultBrands);
+
+                using (MySqlConnection conn = new MySqlConnection(connStr))
+                {
+                    conn.Open();
+                    string sql = "SELECT DISTINCT brand FROM products WHERE brand IS NOT NULL AND brand <> ''";
+                    MySqlCommand cmd = new MySqlCommand(sql, conn);
+                    MySqlDataReader reader = cmd.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        string brand = reader["brand"].ToString();
+                        if (!cmbBrand.Items.Contains(brand)) // avoid duplicates
+                        {
+                            cmbBrand.Items.Add(brand);
+                        }
+                    }
+                    reader.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error loading brands: " + ex.Message);
+            }
         }
 
         private void LoadData()
@@ -61,29 +143,6 @@ namespace ProductInfos
             }
         }
 
-
-        private void TextBox_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                e.SuppressKeyPress = true; // prevent beep
-
-                TextBox current = sender as TextBox;
-
-                if (current != null)
-                {
-                    if (current == txtSearch)
-                    {
-                        btnSearch.PerformClick();
-                    }
-                    else
-                    {
-                        this.SelectNextControl(current, true, true, true, true);
-                    }
-                }
-            }
-        }
-
         private void btnAdd_Click_1(object sender, EventArgs e)
         {
             using (MySqlConnection conn = new MySqlConnection(connStr))
@@ -93,18 +152,17 @@ namespace ProductInfos
                              "VALUES (@name, @cat, @price, @stock, @brand, @desc, @sup, @status)";
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@name", txtName.Text);
-                cmd.Parameters.AddWithValue("@cat", txtCategory.Text);
+                cmd.Parameters.AddWithValue("@cat", cmbCategory.Text);
                 cmd.Parameters.AddWithValue("@price", txtPrice.Text);
                 cmd.Parameters.AddWithValue("@stock", txtStock.Text);
-                cmd.Parameters.AddWithValue("@brand", txtBrand.Text);
+                cmd.Parameters.AddWithValue("@brand", cmbBrand.Text);
                 cmd.Parameters.AddWithValue("@desc", txtDescription.Text);
                 cmd.Parameters.AddWithValue("@sup", txtSupplier.Text);
                 cmd.Parameters.AddWithValue("@status", cmbStatus.Text);
                 cmd.ExecuteNonQuery();
             }
             LoadData();
-            MessageBox.Show("✅ Added successfully!");   
-
+            MessageBox.Show("✅ Added successfully!");
         }
 
         private void btnEdit_Click_1(object sender, EventArgs e)
@@ -119,10 +177,10 @@ namespace ProductInfos
                 MySqlCommand cmd = new MySqlCommand(sql, conn);
                 cmd.Parameters.AddWithValue("@id", txtID.Text);
                 cmd.Parameters.AddWithValue("@name", txtName.Text);
-                cmd.Parameters.AddWithValue("@category", txtCategory.Text);
+                cmd.Parameters.AddWithValue("@category", cmbCategory.Text);
                 cmd.Parameters.AddWithValue("@price", txtPrice.Text);
                 cmd.Parameters.AddWithValue("@stock", txtStock.Text);
-                cmd.Parameters.AddWithValue("@brand", txtBrand.Text);
+                cmd.Parameters.AddWithValue("@brand", cmbBrand.Text);
                 cmd.Parameters.AddWithValue("@desc", txtDescription.Text);
                 cmd.Parameters.AddWithValue("@supplier", txtSupplier.Text);
                 cmd.Parameters.AddWithValue("@status", cmbStatus.SelectedItem.ToString());
@@ -138,34 +196,6 @@ namespace ProductInfos
             }
         }
 
-     
-
-
-        private void btnSearch_Click_1(object sender, EventArgs e)
-        {
-            try
-            {
-                conn = new MySqlConnection(connStr);
-                conn.Open();
-
-                string sql = "SELECT * FROM products WHERE product_name LIKE @search OR category LIKE @search OR brand LIKE @search";
-                adapter = new MySqlDataAdapter(sql, conn);
-                adapter.SelectCommand.Parameters.AddWithValue("@search", "%" + txtSearch.Text + "%");
-
-                dt = new DataTable();
-                adapter.Fill(dt);
-                dataGridView1.DataSource = dt;
-
-                conn.Close();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Error searching product: " + ex.Message);
-            }
-        }
-
-        
-
         private void dataGridView1_CellClick_1(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex >= 0)
@@ -173,10 +203,10 @@ namespace ProductInfos
                 DataGridViewRow row = dataGridView1.Rows[e.RowIndex];
                 txtID.Text = row.Cells["id"].Value.ToString();
                 txtName.Text = row.Cells["product_name"].Value.ToString();
-                txtCategory.Text = row.Cells["category"].Value.ToString();
+                cmbCategory.Text = row.Cells["category"].Value.ToString();
                 txtPrice.Text = row.Cells["price"].Value.ToString();
                 txtStock.Text = row.Cells["stock"].Value.ToString();
-                txtBrand.Text = row.Cells["brand"].Value.ToString();
+                cmbBrand.Text = row.Cells["brand"].Value.ToString();
                 txtDescription.Text = row.Cells["description"].Value.ToString();
                 txtSupplier.Text = row.Cells["supplier"].Value.ToString();
                 cmbStatus.Text = row.Cells["status"].Value.ToString();

@@ -30,13 +30,10 @@
         {
             this.label6 = new System.Windows.Forms.Label();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
-            this.txtSearch = new System.Windows.Forms.TextBox();
-            this.btnSearch = new System.Windows.Forms.Button();
             this.btnEdit = new System.Windows.Forms.Button();
             this.btnAdd = new System.Windows.Forms.Button();
             this.txtStock = new System.Windows.Forms.TextBox();
             this.txtPrice = new System.Windows.Forms.TextBox();
-            this.txtCategory = new System.Windows.Forms.TextBox();
             this.txtName = new System.Windows.Forms.TextBox();
             this.txtID = new System.Windows.Forms.TextBox();
             this.label5 = new System.Windows.Forms.Label();
@@ -48,10 +45,11 @@
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
-            this.txtBrand = new System.Windows.Forms.TextBox();
             this.txtDescription = new System.Windows.Forms.TextBox();
             this.txtSupplier = new System.Windows.Forms.TextBox();
             this.cmbStatus = new System.Windows.Forms.ComboBox();
+            this.cmbCategory = new System.Windows.Forms.ComboBox();
+            this.cmbBrand = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -82,25 +80,6 @@
             this.dataGridView1.Size = new System.Drawing.Size(711, 117);
             this.dataGridView1.TabIndex = 32;
             this.dataGridView1.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.dataGridView1_CellClick_1);
-            // 
-            // txtSearch
-            // 
-            this.txtSearch.Font = new System.Drawing.Font("Poor Richard", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtSearch.Location = new System.Drawing.Point(675, 269);
-            this.txtSearch.Name = "txtSearch";
-            this.txtSearch.Size = new System.Drawing.Size(270, 30);
-            this.txtSearch.TabIndex = 31;
-            // 
-            // btnSearch
-            // 
-            this.btnSearch.Font = new System.Drawing.Font("Poor Richard", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnSearch.Location = new System.Drawing.Point(537, 264);
-            this.btnSearch.Name = "btnSearch";
-            this.btnSearch.Size = new System.Drawing.Size(108, 38);
-            this.btnSearch.TabIndex = 30;
-            this.btnSearch.Text = "Search";
-            this.btnSearch.UseVisualStyleBackColor = true;
-            this.btnSearch.Click += new System.EventHandler(this.btnSearch_Click_1);
             // 
             // btnEdit
             // 
@@ -139,14 +118,6 @@
             this.txtPrice.Name = "txtPrice";
             this.txtPrice.Size = new System.Drawing.Size(346, 30);
             this.txtPrice.TabIndex = 25;
-            // 
-            // txtCategory
-            // 
-            this.txtCategory.Font = new System.Drawing.Font("Poor Richard", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtCategory.Location = new System.Drawing.Point(138, 147);
-            this.txtCategory.Name = "txtCategory";
-            this.txtCategory.Size = new System.Drawing.Size(309, 30);
-            this.txtCategory.TabIndex = 24;
             // 
             // txtName
             // 
@@ -254,14 +225,6 @@
             this.label10.TabIndex = 37;
             this.label10.Text = "Status";
             // 
-            // txtBrand
-            // 
-            this.txtBrand.Font = new System.Drawing.Font("Poor Richard", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtBrand.Location = new System.Drawing.Point(106, 269);
-            this.txtBrand.Name = "txtBrand";
-            this.txtBrand.Size = new System.Drawing.Size(342, 30);
-            this.txtBrand.TabIndex = 38;
-            // 
             // txtDescription
             // 
             this.txtDescription.Font = new System.Drawing.Font("Poor Richard", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -286,28 +249,42 @@
             this.cmbStatus.Size = new System.Drawing.Size(183, 24);
             this.cmbStatus.TabIndex = 42;
             // 
+            // cmbCategory
+            // 
+            this.cmbCategory.FormattingEnabled = true;
+            this.cmbCategory.Location = new System.Drawing.Point(138, 139);
+            this.cmbCategory.Name = "cmbCategory";
+            this.cmbCategory.Size = new System.Drawing.Size(309, 24);
+            this.cmbCategory.TabIndex = 43;
+            // 
+            // cmbBrand
+            // 
+            this.cmbBrand.FormattingEnabled = true;
+            this.cmbBrand.Location = new System.Drawing.Point(106, 264);
+            this.cmbBrand.Name = "cmbBrand";
+            this.cmbBrand.Size = new System.Drawing.Size(309, 24);
+            this.cmbBrand.TabIndex = 44;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1216, 528);
+            this.Controls.Add(this.cmbBrand);
+            this.Controls.Add(this.cmbCategory);
             this.Controls.Add(this.cmbStatus);
             this.Controls.Add(this.txtSupplier);
             this.Controls.Add(this.txtDescription);
-            this.Controls.Add(this.txtBrand);
             this.Controls.Add(this.label10);
             this.Controls.Add(this.label9);
             this.Controls.Add(this.label8);
             this.Controls.Add(this.label7);
             this.Controls.Add(this.label6);
             this.Controls.Add(this.dataGridView1);
-            this.Controls.Add(this.txtSearch);
-            this.Controls.Add(this.btnSearch);
             this.Controls.Add(this.btnEdit);
             this.Controls.Add(this.btnAdd);
             this.Controls.Add(this.txtStock);
             this.Controls.Add(this.txtPrice);
-            this.Controls.Add(this.txtCategory);
             this.Controls.Add(this.txtName);
             this.Controls.Add(this.txtID);
             this.Controls.Add(this.label5);
@@ -328,13 +305,10 @@
 
         private System.Windows.Forms.Label label6;
         private System.Windows.Forms.DataGridView dataGridView1;
-        private System.Windows.Forms.TextBox txtSearch;
-        private System.Windows.Forms.Button btnSearch;
         private System.Windows.Forms.Button btnEdit;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.TextBox txtStock;
         private System.Windows.Forms.TextBox txtPrice;
-        private System.Windows.Forms.TextBox txtCategory;
         private System.Windows.Forms.TextBox txtName;
         private System.Windows.Forms.TextBox txtID;
         private System.Windows.Forms.Label label5;
@@ -346,10 +320,11 @@
         private System.Windows.Forms.Label label8;
         private System.Windows.Forms.Label label9;
         private System.Windows.Forms.Label label10;
-        private System.Windows.Forms.TextBox txtBrand;
         private System.Windows.Forms.TextBox txtDescription;
         private System.Windows.Forms.TextBox txtSupplier;
         private System.Windows.Forms.ComboBox cmbStatus;
+        private System.Windows.Forms.ComboBox cmbCategory;
+        private System.Windows.Forms.ComboBox cmbBrand;
     }
 }
 
